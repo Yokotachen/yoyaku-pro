@@ -1,14 +1,14 @@
 <template>
   <div>
-    <UserInfo></UserInfo>
+    <CardYoyaku></CardYoyaku>
   </div>
 </template>
 
 <script>
-import UserInfo from "../../components/UserInfo";
+import CardYoyaku from "../../components/CardYoyaku";
 export default {
   components: {
-    UserInfo
+    CardYoyaku
   }
 };
 </script>

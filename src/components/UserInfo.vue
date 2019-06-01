@@ -1,5 +1,5 @@
 <template>
-  <div>今日预约</div>
+  <div>个人信息表格</div>
 </template>
 
 <script>

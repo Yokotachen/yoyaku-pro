@@ -1,9 +1,20 @@
 <template>
-  <div>用户管理</div>
+  <div class="usertable">
+    <UserTable></UserTable>
+  </div>
 </template>
 
 <script>
-export default {};
+import UserTable from "../../components/UserTable";
+export default {
+  components: {
+    UserTable
+  }
+};
 </script>
 
-<style></style>
+<style scoped>
+.usertable {
+  margin-top: 20px;
+}
+</style>

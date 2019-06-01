@@ -13,6 +13,7 @@ const router = new Router({
     //登陆注册页
     {
       path: "/user",
+      hideInMenu: true,
       name: "user",
       component: () =>
         import(/* webpackChunkName: "layouts" */ "./layouts/UserLayout"),
@@ -35,7 +36,7 @@ const router = new Router({
         }
       ]
     },
-    //Dashboard
+    // Yoyaku
     {
       path: "/",
       component: () =>
@@ -43,43 +44,41 @@ const router = new Router({
       children: [
         {
           path: "/",
-          redirect: "/dashboard/todayyoyaku"
+          redirect: "/yoyaku/yoyaku"
         },
         {
-          path: "/dashboard",
-          name: "dashboard",
+          path: "/yoyaku",
+          name: "yoyakumain",
+          meta: { icon: "clock-circle", title: "预约" },
           component: { render: h => h("router-view") },
           children: [
             {
-              path: "/dashboard",
-              redirect: "/dashboard/todayyoyaku"
+              path: "/yoyaku",
+              redirect: "/yoyaku/yoyaku"
             },
             {
-              path: "/dashboard/todayyoyaku",
-              name: "todayyoyaku",
-              component: () =>
-                import(/* webpackChunkName: "dashboard" */ "./views/Dashboard/TodayYoyaku")
-            },
-            {
-              path: "/dashboard/myyoyaku",
-              name: "myyoyaku",
-              component: () =>
-                import(/* webpackChunkName: "dashboard" */ "./views/Dashboard/MyYoyaku")
-            },
-            {
-              path: "/dashboard/yoyaku",
+              path: "/yoyaku/yoyaku",
               name: "yoyaku",
+              meta: { icon: "schedule", title: "预约" },
               component: () =>
-                import(/* webpackChunkName: "dashboard" */ "./views/Dashboard/Yoyaku")
+                import(/* webpackChunkName: "Yoyaku" */ "./views/Yoyaku/Yoyaku")
+            },
+            {
+              path: "/yoyaku/myyoyaku",
+              name: "myyoyaku",
+              meta: { icon: "pie-chart", title: "我的预约" },
+              component: () =>
+                import(/* webpackChunkName: "Yoyaku" */ "./views/Yoyaku/MyYoyaku")
             }
           ]
         }
       ]
     },
-    //个人页
+    // 个人页
     {
       path: "/person",
       name: "person",
+      meta: { icon: "user", title: "个人" },
       component: () =>
         import(/* webpackChunkName: "layouts" */ "./layouts/BasicLayout"),
       children: [
@@ -90,15 +89,17 @@ const router = new Router({
         {
           path: "/person/personinfo",
           name: "personinfo",
+          meta: { icon: "idcard", title: "个人信息" },
           component: () =>
             import(/* webpackChunkName: "Person" */ "./views/Person/PersonInfo")
         }
       ]
     },
-    //管理员
+    // 管理员
     {
       path: "/administor",
       name: "administor",
+      meta: { icon: "key", title: "管理员" },
       component: () =>
         import(/* webpackChunkName: "layouts" */ "./layouts/BasicLayout"),
       children: [
@@ -109,26 +110,30 @@ const router = new Router({
         {
           path: "/administor/usermanager",
           name: "usermanager",
+          meta: { icon: "team", title: "用户管理" },
           component: () =>
-            import(/* webpackChunkName: "Person" */ "./views/Administor/UserManager")
+            import(/* webpackChunkName: "Administor" */ "./views/Administor/UserManager")
         },
         {
           path: "/administor/yoyakumanager",
           name: "yoyakumanager",
+          meta: { icon: "bars", title: "预约管理" },
           component: () =>
-            import(/* webpackChunkName: "Person" */ "./views/Administor/YoyakuManager")
+            import(/* webpackChunkName: "Administor" */ "./views/Administor/YoyakuManager")
         },
         {
           path: "/administor/machinemanager",
           name: "machinemanager",
+          meta: { icon: "database", title: "设备管理" },
           component: () =>
-            import(/* webpackChunkName: "Person" */ "./views/Administor/MachineManager")
+            import(/* webpackChunkName: "Administor" */ "./views/Administor/MachineManager")
         }
       ]
     },
     {
       path: "*",
       name: "404",
+      hideInMenu: true,
       component: NotFound
     }
   ]

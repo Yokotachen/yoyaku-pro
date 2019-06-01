@@ -1,9 +1,20 @@
 <template>
-  <div>装置管理</div>
+  <div class="machinetable">
+    <MachineTable></MachineTable>
+  </div>
 </template>
 
 <script>
-export default {};
+import MachineTable from "../../components/MachineTable.vue";
+export default {
+  components: {
+    MachineTable
+  }
+};
 </script>
 
-<style></style>
+<style scoped>
+.machinetable {
+  margin-top: 20px;
+}
+</style>

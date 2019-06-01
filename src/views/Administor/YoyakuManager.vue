@@ -1,9 +1,20 @@
 <template>
-  <div>预约管理</div>
+  <div class="yoyakutable">
+    <YoyakuTable></YoyakuTable>
+  </div>
 </template>
 
 <script>
-export default {};
+import YoyakuTable from "../../components/YoyakuTable";
+export default {
+  components: {
+    YoyakuTable
+  }
+};
 </script>
 
-<style></style>
+<style scoped>
+.yoyakutable {
+  margin-top: 20px;
+}
+</style>

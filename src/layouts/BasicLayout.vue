@@ -1,33 +1,46 @@
 <template>
-  <a-layout id="components-layout-demo-responsive">
+  <a-layout id="components-layout-demo-side" style="min-height: 100vh">
     <a-layout-sider
-      breakpoint="lg"
+      collapsible
       v-model="collapsed"
-      @breakpoint="onBreakpoint"
+      :trigger="null"
       width="256px"
+      :theme="proTheme"
     >
       <div class="logo">
         <a href="/">
-          <img class="logoimg" src="../assets/logo.png" alt="logo" />
-          <h1 class="logoname">Yoyakukun Pro</h1>
+          <span>
+            <img class="logoimg" src="../assets/logo.png" alt="logo" />
+          </span>
+          <span>
+            <h1 class="logoname" style="color:#ae8e62">Yoyakukun Pro</h1>
+          </span>
+          <!-- <h1 class="logoname">Yoyakukun Pro</h1> -->
         </a>
       </div>
-      <SiderMenu></SiderMenu>
+      <SiderMenu :inlineCollapsed="collapsed" :theme="proTheme"></SiderMenu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header :style="{ background: '#fff', padding: 0 }">
+      <a-layout-header style="background: #fff; padding: 0">
         <a-icon
           class="trigger"
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
           @click="collapsed = !collapsed"
-        >
-        </a-icon>
-        <Header></Header>
+        ></a-icon>
+        <a-switch
+          class="switch"
+          defaultChecked
+          :checked="checked"
+          @change="handleSettingChange()"
+          checkedChildren="Dark"
+          unCheckedChildren="Light"
+        />
+        <Header class="header"></Header>
       </a-layout-header>
-      <a-layout-content :style="{ margin: '24px 16px 0' }">
+      <a-layout-content style="margin: 0 16px">
         <router-view></router-view>
       </a-layout-content>
-      <a-layout-footer style="textAlign: center">
+      <a-layout-footer style="text-align: center">
         <Footer></Footer>
       </a-layout-footer>
     </a-layout>
@@ -38,6 +51,7 @@
 import Header from "./Header";
 import SiderMenu from "./SiderMenu";
 import Footer from "./Footer";
+// import { prototype } from "events";
 
 export default {
   components: {
@@ -47,8 +61,15 @@ export default {
   },
   data() {
     return {
-      collapsed: false
+      collapsed: false,
+      checked: true,
+      logoColor: "white"
     };
+  },
+  computed: {
+    proTheme() {
+      return this.$route.query.proTheme || "dark";
+    }
   },
   methods: {
     onCollapse(collapsed, type) {
@@ -56,6 +77,15 @@ export default {
     },
     onBreakpoint(broken) {
       console.log(broken);
+    },
+    handleSettingChange() {
+      this.$router.push({
+        query: {
+          ...this.$route.query,
+          ["proTheme"]: this.checked ? "light" : "dark"
+        }
+      });
+      this.checked = !this.checked;
     }
   }
 };
@@ -66,28 +96,38 @@ export default {
   height: 64px;
   line-height: 64px;
   overflow: hidden;
-  padding-left: 10px;
-  background: #002140;
+  text-align: center;
 }
 
 .logoimg {
   height: 35px;
-  padding-left: 10px;
 }
 
 .logoname {
   display: inline-block;
-  margin: 0 0 0 25px;
-  color: #fff;
-  font-weight: 600;
+  margin-top: 8px;
+  font-weight: 800;
   font-size: 20px;
   font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
   vertical-align: middle;
+  color: rgb(174, 142, 98);
+  margin-left: 15px;
 }
 
 .trigger {
   padding: 0 20px;
   line-height: 64px;
   font-size: 20px;
+}
+
+.header {
+  float: right;
+  margin-right: 19px;
+}
+
+.switch {
+  float: right;
+  margin-right: 15px;
+  margin-top: 20px;
 }
 </style>
