@@ -14,6 +14,7 @@
               size="large"
               addonAfter="@nec.cn"
               placeholder="用户名:请输入邮箱前缀"
+              @change="inputUsername"
             >
               <a-icon slot="prefix" type="user" />
             </a-input>
@@ -33,7 +34,7 @@
             </a-input>
           </a-form-item>
           <a-form-item>
-            <a-input size="large" type="tel" placeholder="8219352">
+            <a-input size="large" type="tel" placeholder="电话:8219352">
               <a-icon slot="prefix" type="phone" />
             </a-input>
           </a-form-item>
@@ -54,7 +55,20 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      inputUserName: "",
+      inputPWD: "",
+      inputComfirmPWD: ""
+    };
+  },
+  methods: {
+    inputUsername(e) {
+      this.username = e.target.value;
+    }
+  }
+};
 </script>
 
 <style scoped>

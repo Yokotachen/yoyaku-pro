@@ -2,7 +2,7 @@
   <div>
     <img class="logoimg" src="../assets/logo.png" alt="logo" />
     <br />
-    <a href="https://github.com/Yokotachen">
+    <a href="https://github.com/Yokotachen/yoyaku-pro">
       Powerd By
       <a-icon type="github" />
       Yokota chen
