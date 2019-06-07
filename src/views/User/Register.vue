@@ -8,33 +8,56 @@
         </div>
         <div class="logonamedsc">预约君进化版</div>
         <span class="register">注册</span>
-        <a-form>
-          <a-form-item>
+        <a-form :form="form" @submit="handleSubmit">
+          <a-form-item :validateStatus="emailHeaderDup">
             <a-input
               size="large"
               addonAfter="@nec.cn"
               placeholder="用户名:请输入邮箱前缀"
-              @change="inputUsername"
+              v-decorator="[
+                'emailheader',
+                { rules: [{ validator: checkEmailheader }] }
+              ]"
             >
               <a-icon slot="prefix" type="user" />
-            </a-input>
-          </a-form-item>
-          <a-form-item>
-            <a-input size="large" type="password" placeholder="密码:19890122">
-              <a-icon slot="prefix" type="lock" />
             </a-input>
           </a-form-item>
           <a-form-item>
             <a-input
               size="large"
               type="password"
+              placeholder="密码:19890122"
+              v-decorator="[
+                'passwd',
+                { rules: [{ required: true, message: '密码不能为空' }] }
+              ]"
+            >
+              <a-icon slot="prefix" type="lock" />Íß
+            </a-input>
+          </a-form-item>
+          <a-form-item hasFeedback>
+            <a-input
+              size="large"
+              type="password"
               placeholder="确认密码:19890122"
+              v-decorator="[
+                'comfirmpasswd',
+                { rules: [{ validator: checksamepwd }] }
+              ]"
             >
               <a-icon slot="prefix" type="lock" />
             </a-input>
           </a-form-item>
           <a-form-item>
-            <a-input size="large" type="tel" placeholder="电话:8219352">
+            <a-input
+              size="large"
+              type="tel"
+              placeholder="电话:8219352"
+              v-decorator="[
+                'tel',
+                { rules: [{ required: true, message: '密码不能为空' }] }
+              ]"
+            >
               <a-icon slot="prefix" type="phone" />
             </a-input>
           </a-form-item>
@@ -55,17 +78,52 @@
 </template>
 
 <script>
+import debounce from "lodash/debounce";
 export default {
   data() {
+    this.form = this.$form.createForm(this);
     return {
-      inputUserName: "",
-      inputPWD: "",
-      inputComfirmPWD: ""
+      formLayout: "horizontal",
+      emailHeaderDup: "",
+      comfirmpwd: ""
     };
   },
+  created() {
+    this.checkEmailheader = debounce(this.checkEmailheader, 2000);
+    this.checksamepwd = debounce(this.checksamepwd, 500);
+  },
   methods: {
-    inputUsername(e) {
-      this.username = e.target.value;
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          console.log("Received values of form: ", values);
+        }
+      });
+    },
+    checkEmailheader(rule, value, callback) {
+      if (value) {
+        if (value === "admin") {
+          this.emailHeaderDup = "success";
+          callback("有效的用户名");
+        } else {
+          this.emailHeaderDup = "error";
+          callback("用户名已存在");
+        }
+      } else {
+        this.emailHeaderDup = "error";
+        callback("用户名不能为空");
+      }
+    },
+    checksamepwd(rule, value, callback) {
+      const form = this.form;
+      if (value && value !== form.getFieldValue("passwd")) {
+        this.comfirmpwd = "error";
+        callback("密码不一致");
+      } else {
+        this.comfirmpwd = "success";
+        callback();
+      }
     }
   }
 };
