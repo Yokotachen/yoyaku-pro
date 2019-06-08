@@ -79,6 +79,9 @@
 
 <script>
 import debounce from "lodash/debounce";
+import request from "../../utils/request";
+import { message } from "ant-design-vue";
+import md5 from "js-md5";
 export default {
   data() {
     this.form = this.$form.createForm(this);
@@ -89,7 +92,7 @@ export default {
     };
   },
   created() {
-    this.checkEmailheader = debounce(this.checkEmailheader, 2000);
+    this.checkEmailheader = debounce(this.checkEmailheader, 1000);
     this.checksamepwd = debounce(this.checksamepwd, 500);
   },
   methods: {
@@ -97,19 +100,36 @@ export default {
       e.preventDefault();
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          console.log("Received values of form: ", values);
+          request({
+            url: "api/user/",
+            method: "post",
+            data: {
+              user_name: values.emailheader,
+              password: md5(values.passwd),
+              user_tel: values.tel
+            }
+          }).then(message.success("注册成功", 0));
+          this.$router.push({ path: "/user/login" });
         }
       });
     },
     checkEmailheader(rule, value, callback) {
       if (value) {
-        if (value === "admin") {
-          this.emailHeaderDup = "success";
-          callback("有效的用户名");
-        } else {
-          this.emailHeaderDup = "error";
-          callback("用户名已存在");
-        }
+        request({
+          url: "api/usernamedupchk/",
+          method: "post",
+          data: {
+            user_name: value
+          }
+        }).then(response => {
+          if (response.data.status != 0) {
+            this.emailHeaderDup = "error";
+            callback("用户名重复");
+          } else {
+            this.emailHeaderDup = "success";
+            callback();
+          }
+        });
       } else {
         this.emailHeaderDup = "error";
         callback("用户名不能为空");

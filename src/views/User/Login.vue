@@ -7,18 +7,30 @@
           <span class="logoname">Yoyakukun Pro</span>
         </div>
         <div class="logonamedsc">预约君进化版</div>
-        <a-form>
+        <a-form :form="form" @submit="handleSubmit">
           <a-form-item>
             <a-input
               size="large"
               addonAfter="@nec.cn"
               placeholder="用户名:请输入邮箱前缀"
+              v-decorator="[
+                'emailheader',
+                { rules: [{ required: true, message: '用户名不能为空' }] }
+              ]"
             >
               <a-icon slot="prefix" type="user" />
             </a-input>
           </a-form-item>
           <a-form-item>
-            <a-input size="large" type="password" placeholder="密码:19890122">
+            <a-input
+              size="large"
+              type="password"
+              placeholder="密码:19890122"
+              v-decorator="[
+                'passwd',
+                { rules: [{ required: true, message: '密码不能为空' }] }
+              ]"
+            >
               <a-icon slot="prefix" type="lock" />
             </a-input>
           </a-form-item>
@@ -39,7 +51,41 @@
 </template>
 
 <script>
-export default {};
+import md5 from "js-md5";
+import request from "../../utils/request";
+import { message } from "ant-design-vue";
+
+export default {
+  data() {
+    this.form = this.$form.createForm(this);
+    return {
+      formLayout: "horizontal"
+    };
+  },
+  methods: {
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          request({
+            url: "api/loginchk/",
+            method: "post",
+            data: {
+              user_name: values.emailheader,
+              password: md5(values.passwd)
+            }
+          }).then(response => {
+            if (response.data.status != 0) {
+              message.error(response.data.Message, 5);
+            } else {
+              this.$router.push({ path: "/" });
+            }
+          });
+        }
+      });
+    }
+  }
+};
 </script>
 
 <style scoped>
